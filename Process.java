@@ -1,6 +1,6 @@
 import java.util.Comparator;
 
-public class Process {
+public class Process implements Comparable<Process>, Comparator<Process> {
   private int arrivalTime;
   private int burstTime;
   private int processNo;
@@ -48,4 +48,13 @@ public class Process {
   void setTurnaroundTime(int tat) {
     turnaroundTime = tat;
   }
+
+  public int compareTo(Process p) {
+    return(this.arrivalTime - p.arrivalTime);
+  }
+
+  public int compare(Process p1, Process p2) {
+    return p1.burstTime < p2.burstTime ? -1 : p1.burstTime == p2.burstTime ? 0 : 1;
+  }
+
 }

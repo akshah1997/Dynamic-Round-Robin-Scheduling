@@ -6,6 +6,7 @@ public class Process implements Comparable<Process>, Comparator<Process> {
   private int processNo;
   private int waitingTime;
   private int turnaroundTime;
+  private  boolean finish=false;
 
   public Process() {}
 
@@ -47,6 +48,14 @@ public class Process implements Comparable<Process>, Comparator<Process> {
 
   void setTurnaroundTime(int tat) {
     turnaroundTime = tat;
+  }
+
+  void setFinish(boolean finish) {
+    this.finish = finish;
+  }
+
+  boolean isFinish() {
+    return (finish==true) ? true : false;
   }
 
   public int compareTo(Process p) {

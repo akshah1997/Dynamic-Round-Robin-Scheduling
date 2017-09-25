@@ -18,8 +18,8 @@ class DynamicRoundRobin {
     float avgWaitingTime = 0;
     float avgTurnaroundTime = 0;
     boolean flag = true;
-    Vector v = new Vector();
-    ArrayList<Process> p2 = new ArrayList<Process>(0);
+    Vector<Integer> v = new Vector<Integer>();
+    ArrayList<Process> p2;
 
     System.out.println("\nEnter the no. of processes: ");
     int no_of_proc = sc.nextInt();
@@ -37,14 +37,11 @@ class DynamicRoundRobin {
       v.add(i+1);
     }
 
-    System.out.println(v);
-
     Arrays.sort(p);
     int brst[] = new int[no_of_proc];
     int ind = 0;
 
     for(timeCount=0; ; ) {
-      System.out.println("For entered");
       checkForProcess(timeCount, index);
 
       p2 = (ArrayList<Process>)p1.clone();
@@ -54,7 +51,7 @@ class DynamicRoundRobin {
         maxBurstTime = p2.get(p2.size()-1).getBurstTime();
         System.out.println(maxBurstTime);
         timeQuantum = 0.8f * maxBurstTime;
-        System.out.println(timeQuantum);
+        System.out.println("Time Quantum now: " + timeQuantum);
       }
 
       for(int i=0; i<p1.size(); i++)
@@ -63,32 +60,23 @@ class DynamicRoundRobin {
       timeCount += p1.get(0).getBurstTime();
       System.out.println("\n");
       for(int i=0; i<p1.size(); i++) {
-        if(p1.get(i).getBurstTime() <= timeQuantum) {
+        if(p1.get(i).getBurstTime() <= timeQuantum && !p1.get(i).isFinish()) {
           System.out.println((p1.get(i).getProcessNo()+1)+"\n");
+          p1.get(i).setFinish(true);
           v.removeElement(i+1);
-          //p1.remove(i);
         }
       }
 
       if(p1.size() == no_of_proc) {
         timeQuantum = p2.get(p2.size()-1).getBurstTime();
-        System.out.println(timeQuantum);
+        System.out.println("Time Quantum now: " + timeQuantum);
         flag = false;
       }
-      /*while(p1.get(0).getBurstTime() <= timeQuantum) {
-        System.out.println("removed process " + p1.get(0).getProcessNo());
-        p1.remove(0);
-      }*/
+
       if(v.isEmpty()) {
-        System.out.println("Breaked");
         break;
       }
-      System.out.println("For exited!");
     }
-
-    /*for(int x=0; x<p1.size(); x++) {
-      System.out.println(p1.get(x).getProcessNo()+"\n");
-    }*/
 
   }
 

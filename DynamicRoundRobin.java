@@ -14,6 +14,10 @@ class DynamicRoundRobin {
   public static void main(String[] args) {
     Scanner sc = new Scanner(System.in);
     //int sum = 0;
+    int ganttTime[];
+    int ganttProcNo[];
+    int ganttCount = 0;
+    int ganttTimeCount = 0;
     int maxBurstTime;
     float timeQuantum = 0;
     float avgWaitingTime = 0;
@@ -24,6 +28,9 @@ class DynamicRoundRobin {
 
     System.out.println("\nEnter the no. of processes: ");
     int noOfProc = sc.nextInt();
+
+    ganttTime = new int[noOfProc];
+    ganttProcNo = new int[noOfProc];
 
     p = new Process[noOfProc];
     for(int i=0; i<noOfProc; i++) { // initialising the Process objects
@@ -52,7 +59,7 @@ class DynamicRoundRobin {
         maxBurstTime = p2.get(p2.size()-1).getBurstTime();
         //System.out.println(maxBurstTime);
         timeQuantum = 0.8f * maxBurstTime;
-        System.out.println("\n\nTime Quantum now: " + timeQuantum);
+        //System.out.println("\n\nTime Quantum now: " + timeQuantum);
       }
 
       /*for(int i=0; i<p1.size(); i++)
@@ -65,10 +72,14 @@ class DynamicRoundRobin {
       for(int i=0; i<p1.size(); i++) {
         // if the process's burst time less that current timeQuantum and not yet finished
         if(p1.get(i).getBurstTime() <= timeQuantum && !p1.get(i).isFinish()) {
-          System.out.print("Process finished: "+(p1.get(i).getProcessNo()+1)+"\n");
+          //System.out.print("Process finished: "+(p1.get(i).getProcessNo()+1)+"\n");
           p1.get(i).setWaitingTime(mainCount-p1.get(i).getArrivalTime());
           timeCount += p1.get(i).getBurstTime();
           mainCount += p1.get(i).getBurstTime();
+          ganttProcNo[ganttCount] = p1.get(i).getProcessNo();
+          ganttTimeCount += p1.get(i).getBurstTime();
+          ganttTime[ganttCount++] = ganttTimeCount;
+          //System.out.println(ganttTime);
           p1.get(i).setFinish(true);
           p1.get(i).setTurnaroundTime(mainCount-p1.get(i).getArrivalTime());
           v.removeElement(i+1);
@@ -77,13 +88,23 @@ class DynamicRoundRobin {
 
       if(p1.size() == noOfProc) {
         timeQuantum = p2.get(p2.size()-1).getBurstTime();
-        System.out.println("Time Quantum now: " + timeQuantum);
+        // System.out.println("Time Quantum now: " + timeQuantum);
         flag = false;
       }
 
       if(v.isEmpty()) {
         break;
       }
+    }
+
+    System.out.println("\nGantt Chart: \n");
+    for(int i=0; i<noOfProc; i++) {
+      System.out.print("|\tP"+ganttProcNo[i]+"\t|");
+    }
+
+    System.out.print("\n" + p1.get(0).getArrivalTime() + "\t");
+    for(int i=0; i<noOfProc; i++) {
+      System.out.print("\t"+ganttTime[i]+"\t");
     }
 
     System.out.println("\n\nProcess\t\tArrival Time\tBurst Time\tWaiting Time\tTurnaround Time");
